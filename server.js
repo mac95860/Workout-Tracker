@@ -4,23 +4,25 @@ const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 8080;
 
-const db = require("./models");
-
 const app = express();
 
 app.use(logger("dev"));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(express.static("public"));
 
-require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
+const db = require("./models");
 
-mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true })
+app.use("/api", require("./routes/apiRoutes"));
+app.use("/", require("./routes/htmlRoutes"));
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => {
-        console.log("DB Donnected")
+        console.log("DB Connected")
     }).catch( err => {
-        console.log(`DB Connection Error: ${err.messaage}`)
+        console.log(`DB Connection Error: ${err.message}`)
     });
+
+app.listen(PORT, () => {
+    console.log(`Listening on PORT: ${PORT}`);
+});

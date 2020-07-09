@@ -1,22 +1,18 @@
 const Router = require("express").Router;
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const path = rquire("path");
+const path = require("path");
 
 const htmlRoutes = new Router();
-e
-const db = require("./models");
 
    htmlRoutes.get("/", function(req, res) {
         res.sendFile(path.join(__dirname, "../public/index.html"));
     });
 
     htmlRoutes.get("/exercise", function(req,res) {
-        res.sendFile(path.join(__dirname, "../public/exercise"));
+        res.sendFile(path.join(__dirname, "../public/exercise.html"));
     });
 
     htmlRoutes.get("/stats", function(req, res) {
-        res.sendFile(path.join(__dirname, "../public/stats"));
+        res.sendFile(path.join(__dirname, "../public/stats.html"));
     })
 
 module.exports = htmlRoutes;
