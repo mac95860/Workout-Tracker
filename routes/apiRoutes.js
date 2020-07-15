@@ -9,34 +9,35 @@ const apiRoutes = new Router();
 
 
 //create new workout !!!!!!!WORKS!!!!!!!!!!!!!!
-apiRoutes.post("/workouts", async (req, res) => {
-    const data = await db.Workout.create({type: "workout"});
+// apiRoutes.post("/workouts", async (req, res) => {
+//     const data = await db.Workout.create({type: "workout"});
+//     res.json(data);
+// })
+
+apiRoutes.post('/workouts', async ({body}, res) => {
+    const data = await db.Workout.create(body);
     res.json(data);
 })
 
 //get workouts !!!!!!!!!!!!WORKS!!!!!!!!!!!!!!!!!!
-apiRoutes.get("/workouts", (req, res) => {
-    db.Workout.find({})
-        .then((data) => {
-            res.json(data);
-        })
+apiRoutes.get("/workouts", async (req, res) => {
+    const data = await db.Workout.find({})
+    res.json(data);
+    
 });
 
 //update workout (this is the api the api.js file in public calls)
-apiRoutes.put("/workouts/:id", ({body, params}, res) => {
-    db.Workout.findOneAndUpdate({_id: mongo.ObjectId(params.id)}, {$push: {exercise: body}})
-        .then(dbWorkout => {
-            res.json(dbWorkout);
-            console.log(dbWorkout);
-        })
-
+apiRoutes.put("/workouts/:id", async ({body, params}, res) => {
+    const dbWorkout = await db.Workout.findOneAndUpdate({_id: params.id}, {$push: {exercise: body}}, { new: true })
+    res.json(dbWorkout);
+    
 });
 
 //!!!!!!!!!!!!!!!!!works!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-apiRoutes.get("/workouts/range", (req, res) => {
-    db.Workout.find({}, (err, data) => {
-        res.json(data);
-    })
+apiRoutes.get("/workouts/range", async (req, res) => {
+    const data = await db.Workout.find({});
+    res.json(data);
+    
 })
 
 module.exports = apiRoutes;
